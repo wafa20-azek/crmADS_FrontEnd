@@ -371,14 +371,14 @@
     ></p-button>
   </ng-template> </p-tabPanel>
   <p-tabPanel header="activities">
-      <ng-template pTemplate="content"> activities </ng-template>
+    <ng-template pTemplate="content">
+      <!-- contact's activities -->
+      <app-activities *ngIf="reloadActivities" [contactId]="contactId" ></app-activities>
+    </ng-template>
   </p-tabPanel>
  
   </p-tabView>
 </div>
-<!-- contact's activities -->
-<ng-template pTemplate="content">
-  <app-activities [contactId]="contactId"></app-activities>
-</ng-template>
-  
+
+
 </p-dialog>

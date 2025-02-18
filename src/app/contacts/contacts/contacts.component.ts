@@ -23,6 +23,8 @@ export class ContactsComponent implements OnInit {
   jobTitles = Object.values(JobTitle);
   activities!: Activity[];
   contactId!:number;
+  reloadActivities = false;
+
   constructor(
     private fb: FormBuilder,
     private contactService: ContactsService,
@@ -103,6 +105,8 @@ export class ContactsComponent implements OnInit {
     });
     this.contactId=contactedit.id;
     this.contactDialog = true;
+    this.reloadActivities = false;
+    setTimeout(() => (this.reloadActivities = true), 0);
   }
   addContact() {
     if (this.addForm.valid) {
