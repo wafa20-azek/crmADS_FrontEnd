@@ -1,0 +1,267 @@
+<!-- activities table -->
+<div class="card">
+  <p-toolbar styleClass="mb-4 gap-2">
+    <ng-template pTemplate="left">
+      <p>Activity list</p>
+    </ng-template>
+
+    <ng-template pTemplate="right">
+      <p-button
+        (onClick)="showDialog()"
+        label="Add Activity"
+        styleClass="custom-button"
+      ></p-button>
+    </ng-template>
+  </p-toolbar>
+  <p-table
+    #dt
+    [value]="activities"
+    [rowHover]="true"
+    [sortOrder]="1"
+    [tableStyle]="{ 'min-width': '60rem' }"
+    [paginator]="true"
+    [rows]="5"
+    [rowsPerPageOptions]="[5, 10, 20]"
+    [globalFilterFields]="[
+      'date',
+      'type',
+      'participants',
+      'subject',
+      'note',
+      'actions'
+    ]"
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <th pSortableColumn="date" style="width: 20%">
+          Date <p-sortIcon field="date"></p-sortIcon>
+        </th>
+        <th pSortableColumn="participants" style="width: 20%">
+          Participants <p-sortIcon field="participants"></p-sortIcon>
+        </th>
+        <th pSortableColumn="subject" style="width: 20%">
+          Subject <p-sortIcon field="subject"></p-sortIcon>
+        </th>
+        <th pSortableColumn="type" style="width: 20%">
+          Type <p-sortIcon field="type"></p-sortIcon>
+        </th>
+
+        <th pSortableColumn="note" style="width: 20%">
+          Note <p-sortIcon field="note"></p-sortIcon>
+        </th>
+        <th>Actions</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-activity>
+      <tr>
+        <td>{{ activity.date | date : "short" }}</td>
+        <td>
+          <ul>
+            <li *ngFor="let participant of activity.participants">
+              {{ participant.firstName }} {{ participant.lastName }}
+            </li>
+          </ul>
+        </td>
+        <td>{{ activity.subject }}</td>
+        <td>{{ activity.activityType }}</td>
+
+        <td>{{ activity.note }}</td>
+        <td>
+          <div class="action-menu">
+            <p-button
+              icon="pi pi-pencil"
+              (click)="editActivity(activity)"
+            ></p-button>
+            <p-button
+              icon="pi pi-trash"
+              (click)="deleteActivity(activity.id)"
+            ></p-button>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+<!-- add activity dialog -->
+<p-dialog
+  header="Add New Activity"
+  [modal]="true"
+  [(visible)]="visible"
+  [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
+  [style]="{ width: '50vw' }"
+  [draggable]="false"
+  [resizable]="false"
+  [maximizable]="true"
+>
+  <div class="card flex justify-content-center">
+    <div [formGroup]="activityForm">
+      <fieldset>
+        <legend>Activity Information</legend>
+
+        <div class="container">
+          <div class="left-section">
+            <label>Date <span>*</span></label>
+            <p-calendar
+              inputId="calendar-24h"
+              formControlName="date"
+              [showTime]="true"
+            ></p-calendar>
+            <div
+              *ngIf="
+                activityForm.controls['date'].errors?.required &&
+                activityForm.controls['date'].touched
+              "
+            >
+              <small class="text-danger">Date is required.</small>
+            </div>
+
+            <label>Activity Type <span>*</span></label>
+            <p-dropdown
+              formControlName="activityType"
+              [options]="activityTypes"
+              placeholder="Select activity type "
+            ></p-dropdown>
+            <div
+              *ngIf="
+                activityForm.controls['activityType'].errors?.required &&
+                activityForm.controls['activityType'].touched
+              "
+            >
+              <small class="text-danger">Activity Type is required.</small>
+            </div>
+
+            <label>Participants <span>*</span></label>
+            <p-multiSelect
+              [options]="contacts"
+              formControlName="participants"
+              optionLabel="firstName"
+              placeholder="Select Participants"
+            ></p-multiSelect>
+          </div>
+
+          <div class="right-section">
+            <label>Subject <span>*</span></label>
+            <input type="text" pInputText formControlName="subject" />
+            <div
+              *ngIf="
+                activityForm.controls['subject'].errors?.required &&
+                activityForm.controls['subject'].touched
+              "
+            >
+              <small class="text-danger">Subject is required.</small>
+            </div>
+
+            <label>Note</label>
+            <textarea pInputTextarea formControlName="note"></textarea>
+
+            <label>Documents</label>
+            <p-fileUpload
+              formControlName="documents"
+              chooseLabel="Choose"
+              chooseIcon="pi pi-upload"
+              [multiple]="true"
+              (onSelect)="onFileSelect($event)"
+            >
+              <ng-template pTemplate="content">
+                <ul *ngIf="uploadedFiles.length">
+                  <li *ngFor="let file of uploadedFiles">
+                    {{ file.name }} - {{ file.size }} bytes
+                  </li>
+                </ul>
+              </ng-template>
+            </p-fileUpload>
+          </div>
+        </div>
+      </fieldset>
+    </div>
+
+    <p-toolbar>
+      <div class="p-toolbar-group-end">
+        <button class="button-Cancel">Cancel</button>
+        <p-button
+          label="Save"
+          icon="pi pi-check"
+          (onClick)="saveActivity()"
+        ></p-button>
+      </div>
+    </p-toolbar>
+  </div>
+</p-dialog>
+<!-- edit activity dialog  -->
+<p-dialog
+  header="Activity Details"
+  [(visible)]="activityDialog"
+  [modal]="true"
+  [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
+  [style]="{ width: '50vw' }"
+  [draggable]="false"
+  [resizable]="false"
+  [maximizable]="true"
+>
+  <div class="card flex justify-content-center">
+    <form [formGroup]="editForm">
+      <div class="container">
+        <div class="left-section">
+          <label for="date">Date</label>
+          <p-calendar
+            inputId="calendar-24h"
+            formControlName="date"
+            [showTime]="true"
+          ></p-calendar>
+          <label>Activity Type</label>
+          <p-dropdown
+            formControlName="activityType"
+            [options]="activityTypes"
+            placeholder="Select activity type "
+          ></p-dropdown>
+
+          <label for="participants">Participants</label>
+          <p-multiSelect
+            id="participants"
+            [options]="contacts"
+            formControlName="participants"
+            optionLabel="firstName"
+          ></p-multiSelect>
+        </div>
+        <div class="right-section">
+          <label for="subject">Subject</label>
+          <input
+            pInputText
+            id="subject"
+            type="text"
+            formControlName="subject"
+          />
+          <label for="note">Note</label>
+          <textarea id="note" pInputText formControlName="note"></textarea>
+
+          <label>Documents</label>
+          <div>{{ uploadedFiles }}</div>
+          <p-fileUpload
+            formControlName="documents"
+            chooseLabel="Choose"
+            chooseIcon="pi pi-upload"
+            [multiple]="true"
+            (onSelect)="onFileSelect($event)"
+          >
+          </p-fileUpload>
+        </div>
+
+        <p-toolbar>
+          <div class="p-toolbar-group-end">
+            <p-button
+              label="Cancel"
+              icon="pi pi-check"
+              (onClick)="hideDialog()"
+            ></p-button>
+            <p-button
+              label="Save"
+              icon="pi pi-check"
+              (onClick)="saveEditActivity()"
+            ></p-button>
+          </div>
+        </p-toolbar>
+      </div>
+    </form>
+  </div>
+</p-dialog>

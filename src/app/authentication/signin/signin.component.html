@@ -1,0 +1,51 @@
+<div class="container">
+  <div class="screen-card">
+    <div class="left-section">
+      <div class="card">
+        <form [formGroup]="formGroup">
+          <label>Email</label>
+          <input
+            type="text"
+            pInputText
+            id="pInputText"
+            formControlName="email"
+          />
+          <div
+            *ngIf="
+              formGroup.controls['email'].errors?.required &&
+              formGroup.controls['email'].touched
+            "
+          >
+            <small class="text-danger">Email is required.</small>
+          </div>
+          <label>Password</label>
+          <p-password
+            formControlName="password"
+            [feedback]="false"
+          ></p-password>
+          <div
+            *ngIf="
+              formGroup.controls['password'].errors?.required &&
+              formGroup.controls['password'].touched
+            "
+          >
+            <small class="text-danger">Password is required.</small>
+          </div>
+          <p-button
+            label="Sign in"
+            icon="pi pi-check"
+            iconPos="right"
+          ></p-button>
+          <p>Don't have an account? <a href="/auth/signup">Sign up here!</a></p>
+        </form>
+      </div>
+    </div>
+
+    <div class="right-section">
+      <img
+        src="https://img.freepik.com/free-vector/gradient-crm-illustration_23-2149370936.jpg?semt=ais_hybrid"
+        alt="Image"
+      />
+    </div>
+  </div>
+</div>

@@ -1,0 +1,60 @@
+.action-menu {
+  display: flex;
+  justify-items: center;
+}
+p-button {
+  margin: 2px;
+}
+fieldset {
+  border: 2px solid rgb(238, 125, 19);
+  border-radius: 12px;
+  padding: 5px;
+}
+fieldset legend {
+  color: rgb(238, 125, 19);
+}
+.container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+.left-section,
+.right-section {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+}
+input {
+  width: 100%;
+  padding: 10px;
+  margin: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+p-dropdown {
+  margin: 10px;
+  max-width: 100%;
+}
+span {
+  color: rgb(238, 125, 19);
+}
+small {
+  color: red;
+}
+.button-Cancel,
+.button-Save,
+.button-add {
+  border-radius: 24px;
+  border: none;
+  background-color: rgb(238, 125, 19);
+  color: white;
+  padding: 5px;
+  margin: 5px;
+  width: 7rem;
+  height: 3rem;
+}
+.custom-button {
+  background-color: #ff5733 !important; /* Custom orange color */
+  border-radius: 20px !important; /* Adjust roundness */
+  border: none;
+  color: white !important; /* Text color */
+}
