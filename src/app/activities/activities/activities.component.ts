@@ -15,7 +15,7 @@ interface UploadEvent {
   styleUrls: ['./activities.component.css'],
 })
 export class ActivitiesComponent implements OnInit {
-  @Input() contactId?: number; 
+  @Input() contactId?: number;
   searchValue: string | undefined;
   visible: boolean = false;
   activityForm!: FormGroup;
@@ -34,9 +34,8 @@ export class ActivitiesComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    console.log("helloooooooooooooooo",this.contactId)
     if (this.contactId) {
-      this.fetchContactActivities(); // Fetch activities for a specific contact
+      this.fetchContactActivities(); 
     } else {
       this.fetchActivities();
     }
@@ -72,7 +71,6 @@ export class ActivitiesComponent implements OnInit {
     });
   }
   fetchActivities() {
-    console.log(this.contactId)
     this.activityService.getActivities().subscribe({
       next: (response) => {
         this.activities = response;
@@ -83,7 +81,7 @@ export class ActivitiesComponent implements OnInit {
       },
     });
   }
-  fetchContactActivities(){
+  fetchContactActivities() {
     this.activityService.getActivityByContactId(this.contactId!).subscribe({
       next: (response) => {
         this.activities = response;
@@ -137,7 +135,6 @@ export class ActivitiesComponent implements OnInit {
     }
   }
   editActivity(activity: Activity) {
-    console.log(activity);
     this.editForm.patchValue({
       ...activity,
       date: activity.date ? new Date(activity.date) : null,
@@ -183,6 +180,5 @@ export class ActivitiesComponent implements OnInit {
     for (let file of event.files) {
       this.uploadedFiles.push(file);
     }
-    console.log(this.uploadedFiles);
   }
 }

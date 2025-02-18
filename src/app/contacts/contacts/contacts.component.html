@@ -19,7 +19,6 @@
     dataKey="id"
     [rowHover]="true"
     [sortOrder]="1"
-    [tableStyle]="{ 'min-width': '60rem' }"
     [paginator]="true"
     [rows]="5"
     [rowsPerPageOptions]="[5, 10, 20]"
@@ -111,109 +110,140 @@
   [draggable]="false"
   [resizable]="false"
   [maximizable]="true"
-  >
+  styleClass="p-fluid"
+  ><div class="card">
+    <div class="col flex align-items-center justify-content-center">
+      <div [formGroup]="addForm">
+        <fieldset>
+          <legend>Main Information</legend>
 
-      <div class="col flex align-items-center justify-content-center">
-          <div [formGroup]="addForm">
-            <fieldset>
-              <legend>Main Information</legend>
-
-              <div class="container">
-                <div class="left-section">
-                  <label>FirstName <span>*</span> </label>
-                  <input type="text" pInputText formControlName="firstName" />
-                  <div
-                    *ngIf="
-                      addForm.controls['firstName'].errors?.required &&
-                      addForm.controls['firstName'].touched
-                    "
-                  >
-                    <small class="text-danger">FirstName is required.</small>
-                  </div>
-                  <label>Email</label>
-                  <input type="email" pInputText formControlName="email" />
-                  <div
-                    *ngIf="
-                      addForm.controls['email'].errors?.email &&
-                      addForm.controls['email'].touched
-                    "
-                  >
-                    <small class="text-danger">email must be ***@*** .</small>
-                  </div>
-                  <label>Contact Owner</label>
-                  <p-dropdown
-                    formControlName="contactOwner"
-                    [options]="contacts"
-                    optionLabel="firstName"
-                    placeholder="Select a Contact Owner"
-                  ></p-dropdown>
-                  <label>Job Title</label>
-                  <p-dropdown
-                    formControlName="jobTitle"
-                    [options]="jobTitles"
-                    placeholder="Select job title"
-                  ></p-dropdown>
+          <div class="container">
+            <div class="left-section">
+              <div class="field">
+                <label>FirstName <span>*</span> </label>
+                <input type="text" pInputText formControlName="firstName" />
+                <div
+                  *ngIf="
+                    addForm.controls['firstName'].errors?.required &&
+                    addForm.controls['firstName'].touched
+                  "
+                >
+                  <small class="text-danger">FirstName is required.</small>
                 </div>
-                <div class="right-section">
-                  <label>LastName <span>*</span> </label>
-                  <input type="text" pInputText formControlName="lastName" />
-                  <div
-                    *ngIf="
-                      addForm.controls['lastName'].errors?.required &&
-                      addForm.controls['lastName'].touched
-                    "
-                  >
-                    <small class="text-danger">LastName is required.</small>
-                  </div>
-                  <label>Phone</label>
-                  <input type="number" pInputText formControlName="phone" />
-                  <label>Company</label>
-                  <input type="text" pInputText formControlName="company" />
+                <label>Email</label>
+                <input type="email" pInputText formControlName="email" />
+                <div
+                  *ngIf="
+                    addForm.controls['email'].errors?.email &&
+                    addForm.controls['email'].touched
+                  "
+                >
+                  <small class="text-danger">email must be ***@*** .</small>
                 </div>
               </div>
-            </fieldset>
-
-            <fieldset formGroupName="address">
-              <legend>Address</legend>
-
-              <label>Address</label>
-              <input type="text" pInputText formControlName="address" />
-              <div class="container">
-                <div class="left-section">
-                  <label>Country</label>
-                  <input type="text" pInputText formControlName="country" />
-                  <label>City</label>
-                  <input type="text" pInputText formControlName="city" />
-                </div>
-                <div class="right-section">
-                  <label>State</label>
-                  <input type="text" pInputText formControlName="state" />
-                  <label>Zipcode</label>
-                  <input type="number" pInputText formControlName="zipCode" />
+              <div class="field">
+                <label>Contact Owner</label>
+                <p-dropdown
+                  formControlName="contactOwner"
+                  [options]="contacts"
+                  optionLabel="firstName"
+                  placeholder="Select a Contact Owner"
+                ></p-dropdown>
+                <div
+                  *ngIf="
+                    addForm.controls['contactOwner'].errors?.required &&
+                    addForm.controls['contactOwner'].touched
+                  "
+                >
+                  <small class="text-danger">Contact owner is required.</small>
                 </div>
               </div>
-            </fieldset>
+              <div class="field">
+                <label for="jobTitle">Job Title</label>
+                <p-dropdown
+                  id="jobTitle"
+                  formControlName="jobTitle"
+                  [options]="jobTitles"
+                  placeholder="Select Job Title"
+                >
+                </p-dropdown>
+              </div>
+            </div>
+            <div class="right-section">
+              <div class="field">
+                <label>LastName <span>*</span> </label>
+                <input type="text" pInputText formControlName="lastName" />
+                <div
+                  *ngIf="
+                    addForm.controls['lastName'].errors?.required &&
+                    addForm.controls['lastName'].touched
+                  "
+                >
+                  <small class="text-danger">LastName is required.</small>
+                </div>
+              </div>
+              <div class="field">
+                <label>Phone</label>
+                <input type="number" pInputText formControlName="phone" />
+              </div>
+              <div class="field">
+                <label>Company</label>
+                <input type="text" pInputText formControlName="company" />
+              </div>
+            </div>
           </div>
-          <p-toolbar>
-            <div class="p-toolbar-group-start">
-              <button class="button-Cancel">Send email</button>
-            </div>
+        </fieldset>
 
-            <div class="p-toolbar-group-end">
-              <p-button
-                label="Cancel"
-                icon="pi pi-times"
-                (onClick)="hideDialogAdd()"
-              ></p-button>
-              <p-button
-                label="Save"
-                icon="pi pi-check"
-                (onClick)="addContact()"
-              ></p-button>
+        <fieldset formGroupName="address">
+          <legend>Address</legend>
+          <div class="field">
+            <label>Address</label>
+            <input type="text" pInputText formControlName="address" />
+          </div>
+          <div class="container">
+            <div class="left-section">
+              <div class="field">
+                <label>Country</label>
+                <input type="text" pInputText formControlName="country" />
+              </div>
+              <div class="field">
+                <label>City</label>
+                <input type="text" pInputText formControlName="city" />
+              </div>
             </div>
-          </p-toolbar>
+            <div class="right-section">
+              <div class="field">
+                <label>State</label>
+                <input type="text" pInputText formControlName="state" />
+              </div>
+              <div class="field">
+                <label>Zipcode</label>
+                <input type="number" pInputText formControlName="zipCode" />
+              </div>
+            </div>
+          </div>
+        </fieldset>
+      </div>
+      <p-toolbar>
+        <div class="p-toolbar-group-start">
+          <button class="button-Cancel">Send email</button>
         </div>
 
+        <div class="p-toolbar-group-end">
+          <p-button
+            label="Cancel"
+            icon="pi pi-times"
+            (onClick)="hideDialogAdd()"
+          ></p-button>
+          <p-button
+            label="Save"
+            icon="pi pi-check"
+            (onClick)="addContact()"
+          ></p-button>
+        </div>
+      </p-toolbar>
+    </div>
+  </div>
 </p-dialog>
 <!-- edit contact dialog -->
 <p-dialog
@@ -227,158 +257,194 @@
   [modal]="true"
   styleClass="p-fluid"
 >
-<div class="card">
-  <p-tabView>
-  <p-tabPanel header="Profile"> 
-    <form [formGroup]="editForm">
-    <div class="field">
-      <label for="firstName">First Name</label>
-      <input
-        type="text"
-        pInputText
-        id="firstName"
-        formControlName="firstName"
-        required
-        autofocus
-      />
-      <small
-        class="p-error"
-        *ngIf="submitted && editForm.controls.firstName.invalid"
-      >
-        First Name is required.
-      </small>
-    </div>
+  <div class="card">
+    <p-tabView>
+      <p-tabPanel header="Profile">
+        <div class="col flex align-items-center justify-content-center">
+          <form [formGroup]="editForm">
+            <fieldset>
+              <legend>Main Information</legend>
+              <div class="container">
+                <div class="left-section">
+                  <div class="field">
+                    <label for="firstName">First Name</label>
+                    <input
+                      type="text"
+                      pInputText
+                      id="firstName"
+                      formControlName="firstName"
+                      required
+                      autofocus
+                    />
+                    <small
+                      class="p-error"
+                      *ngIf="submitted && editForm.controls.firstName.invalid"
+                    >
+                      First Name is required.
+                    </small>
+                  </div>
 
-    <div class="field">
-      <label for="lastName">Last Name</label>
-      <input
-        type="text"
-        pInputText
-        id="lastName"
-        formControlName="lastName"
-        required
-      />
-      <small
-        class="p-error"
-        *ngIf="submitted && editForm.controls.lastName.invalid"
-      >
-        Last Name is required.
-      </small>
-    </div>
+                  <div class="field">
+                    <label for="email">Email</label>
+                    <input
+                      type="email"
+                      pInputText
+                      id="email"
+                      formControlName="email"
+                      required
+                    />
+                    <small
+                      class="p-error"
+                      *ngIf="submitted && editForm.controls.email.invalid"
+                    >
+                      A valid email is required.
+                    </small>
+                  </div>
 
-    <div class="field">
-      <label for="email">Email</label>
-      <input
-        type="email"
-        pInputText
-        id="email"
-        formControlName="email"
-        required
-      />
-      <small
-        class="p-error"
-        *ngIf="submitted && editForm.controls.email.invalid"
-      >
-        A valid email is required.
-      </small>
-    </div>
+                  <div class="field">
+                    <label for="jobTitle">Job Title</label>
+                    <p-dropdown
+                      id="jobTitle"
+                      formControlName="jobTitle"
+                      [options]="jobTitles"
+                      placeholder="Select Job Title"
+                    >
+                    </p-dropdown>
+                  </div>
 
-    <div class="field">
-      <label for="phone">Phone</label>
-      <input type="text" pInputText id="phone" formControlName="phone" />
-    </div>
+                  <div class="field">
+                    <label for="contactOwner">Contact Owner</label>
+                    <p-dropdown
+                      id="contactOwner"
+                      formControlName="contactOwner"
+                      [options]="contacts"
+                      optionLabel="firstName"
+                      placeholder="Select Contact Owner"
+                    >
+                    </p-dropdown>
+                  </div>
+                </div>
+                <div class="right-section">
+                  <div class="field">
+                    <label for="lastName">Last Name</label>
+                    <input
+                      type="text"
+                      pInputText
+                      id="lastName"
+                      formControlName="lastName"
+                      required
+                    />
+                    <small
+                      class="p-error"
+                      *ngIf="submitted && editForm.controls.lastName.invalid"
+                    >
+                      Last Name is required.
+                    </small>
+                  </div>
 
-    <div class="field">
-      <label for="company">Company</label>
-      <input type="text" pInputText id="company" formControlName="company" />
-    </div>
+                  <div class="field">
+                    <label for="phone">Phone</label>
+                    <input
+                      type="text"
+                      pInputText
+                      id="phone"
+                      formControlName="phone"
+                    />
+                  </div>
 
-    <div class="field">
-      <label for="jobTitle">Job Title</label>
-      <p-dropdown
-        id="jobTitle"
-        formControlName="jobTitle"
-        [options]="jobTitles"
-        placeholder="Select Job Title"
-      >
-      </p-dropdown>
-    </div>
+                  <div class="field">
+                    <label for="company">Company</label>
+                    <input
+                      type="text"
+                      pInputText
+                      id="company"
+                      formControlName="company"
+                    />
+                  </div>
+                </div>
+              </div>
+            </fieldset>
+            <fieldset formGroupName="address">
+              <legend>Address</legend>
 
-    <div class="field">
-      <label for="contactOwner">Contact Owner</label>
-      <p-dropdown
-        id="contactOwner"
-        formControlName="contactOwner"
-        [options]="contacts"
-        optionLabel="firstName"
-        placeholder="Select Contact Owner"
-      >
-      </p-dropdown>
-    </div>
-
-    <fieldset formGroupName="address">
-      <legend>Address</legend>
-
-      <div class="field">
-        <label for="address">Address</label>
-        <input type="text" pInputText id="address" formControlName="address" />
-      </div>
-
-      <div class="formgrid grid">
-        <div class="field col">
-          <label for="country">Country</label>
-          <input
-            type="text"
-            pInputText
-            id="country"
-            formControlName="country"
-          />
+              <div class="field">
+                <label for="address">Address</label>
+                <input
+                  type="text"
+                  pInputText
+                  id="address"
+                  formControlName="address"
+                />
+              </div>
+              <div class="container">
+                <div class="left-section">
+                  <div class="formgrid grid">
+                    <div class="field col">
+                      <label for="country">Country</label>
+                      <input
+                        type="text"
+                        pInputText
+                        id="country"
+                        formControlName="country"
+                      />
+                    </div>
+                    <div class="field col">
+                      <label for="state">State</label>
+                      <input
+                        type="text"
+                        pInputText
+                        id="state"
+                        formControlName="state"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div class="right-section">
+                  <div class="field col">
+                    <label for="city">City</label>
+                    <input
+                      type="text"
+                      pInputText
+                      id="city"
+                      formControlName="city"
+                    />
+                  </div>
+                  <div class="field col">
+                    <label for="zipCode">Zip Code</label>
+                    <input
+                      type="text"
+                      pInputText
+                      id="zipCode"
+                      formControlName="zipCode"
+                    />
+                  </div>
+                </div>
+              </div>
+            </fieldset>
+          </form>
+          <p-toolbar>
+            <p-button
+              label="Cancel"
+              icon="pi pi-times"
+              (onClick)="hideDialog()"
+            ></p-button>
+            <p-button
+              label="Save"
+              icon="pi pi-check"
+              (onClick)="saveContact()"
+            ></p-button>
+          </p-toolbar>
         </div>
-        <div class="field col">
-          <label for="state">State</label>
-          <input type="text" pInputText id="state" formControlName="state" />
-        </div>
-      </div>
-
-      <div class="formgrid grid">
-        <div class="field col">
-          <label for="city">City</label>
-          <input type="text" pInputText id="city" formControlName="city" />
-        </div>
-        <div class="field col">
-          <label for="zipCode">Zip Code</label>
-          <input
-            type="text"
-            pInputText
-            id="zipCode"
-            formControlName="zipCode"
-          />
-        </div>
-      </div>
-    </fieldset>
-  </form>
-
-  <ng-template pTemplate="footer">
-    <p-button
-      label="Cancel"
-      icon="pi pi-times"
-      (onClick)="hideDialog()"
-    ></p-button>
-    <p-button
-      label="Save"
-      icon="pi pi-check"
-      (onClick)="saveContact()"
-    ></p-button>
-  </ng-template> </p-tabPanel>
-  <p-tabPanel header="activities">
-    <ng-template pTemplate="content">
-      <!-- contact's activities -->
-      <app-activities *ngIf="reloadActivities" [contactId]="contactId" ></app-activities>
-    </ng-template>
-  </p-tabPanel>
- 
-  </p-tabView>
-</div>
-
-
+      </p-tabPanel>
+      <p-tabPanel header="activities">
+        <ng-template pTemplate="content">
+          <!-- contact's activities -->
+          <app-activities
+            *ngIf="reloadActivities"
+            [contactId]="contactId"
+          ></app-activities>
+        </ng-template>
+      </p-tabPanel>
+    </p-tabView>
+  </div>
 </p-dialog>

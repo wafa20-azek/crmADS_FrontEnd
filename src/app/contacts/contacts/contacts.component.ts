@@ -22,13 +22,13 @@ export class ContactsComponent implements OnInit {
   contacts!: Contact[];
   jobTitles = Object.values(JobTitle);
   activities!: Activity[];
-  contactId!:number;
+  contactId!: number;
   reloadActivities = false;
 
   constructor(
     private fb: FormBuilder,
     private contactService: ContactsService,
-     private activityService: ActivitiesService,
+    private activityService: ActivitiesService
   ) {}
 
   ngOnInit() {
@@ -39,8 +39,8 @@ export class ContactsComponent implements OnInit {
       email: ['', Validators.email],
       phone: [''],
       company: [''],
-      contactOwner: [''],
-      jobTitle: [''],
+      contactOwner: ['', Validators.required],
+      jobTitle: [null],
       address: this.fb.group({
         address: [''],
         country: [''],
@@ -57,7 +57,7 @@ export class ContactsComponent implements OnInit {
       phone: [''],
       company: [''],
       jobTitle: [''],
-      contactOwner: [''],
+      contactOwner: ['', Validators.required],
       address: this.fb.group({
         address: [''],
         country: [''],
@@ -103,7 +103,7 @@ export class ContactsComponent implements OnInit {
         zipCode: contactedit.address.zipCode,
       },
     });
-    this.contactId=contactedit.id;
+    this.contactId = contactedit.id;
     this.contactDialog = true;
     this.reloadActivities = false;
     setTimeout(() => (this.reloadActivities = true), 0);
@@ -121,8 +121,7 @@ export class ContactsComponent implements OnInit {
         },
       });
 
-      this.submitted = true;
-      this.contactDialog = false;
+      this.hideDialogAdd();
       this.fetchContacts();
     }
   }
@@ -164,7 +163,6 @@ export class ContactsComponent implements OnInit {
   }
   hideDialog() {
     this.contactDialog = false;
-    this.submitted = false;
     this.editForm.reset();
   }
   hideDialogAdd() {

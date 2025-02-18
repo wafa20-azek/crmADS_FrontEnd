@@ -23,7 +23,7 @@ fieldset legend {
   flex-direction: column;
   padding: 1rem;
 }
-input {
+#address,input {
   width: 99%;
   padding: 10px;
   margin: 10px;
@@ -52,9 +52,4 @@ small {
   width: 7rem;
   height: 3rem;
 }
-.custom-button {
-  background-color: #ff5733 !important; /* Custom orange color */
-  border-radius: 20px !important; /* Adjust roundness */
-  border: none;
-  color: white !important; /* Text color */
-}
+
