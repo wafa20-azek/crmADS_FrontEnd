@@ -16,6 +16,7 @@
   <p-table
     #dt
     [value]="activities"
+    dataKey="id"
     [rowHover]="true"
     [sortOrder]="1"
     [paginator]="true"
@@ -24,12 +25,21 @@
     [globalFilterFields]="[
       'date',
       'type',
-      'participants',
       'subject',
-      'note',
-      'actions'
+      'note'
     ]"
   >
+    <ng-template pTemplate="caption">
+      <div class="flex justify-content-between">
+        <input
+          pInputText
+          type="text"
+          (input)="onSearch($event)"
+          placeholder="Keyword Search"
+        />
+      </div>
+    </ng-template>
+
     <ng-template pTemplate="header">
       <tr>
         <th pSortableColumn="date" style="width: 20%">
@@ -80,6 +90,11 @@
         </td>
       </tr>
     </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="8">No activities found.</td>
+      </tr>
+    </ng-template>
   </p-table>
 </div>
 <!-- add activity dialog -->
@@ -94,8 +109,8 @@
   [maximizable]="true"
   styleClass="p-fluid"
 >
-<div class="col flex align-items-center justify-content-center">
-  <div [formGroup]="activityForm">
+  <div class="card flex justify-content-center">
+    <form [formGroup]="activityForm">
       <div class="container">
         <div class="left-section">
           <label>Date <span>*</span></label>
@@ -141,9 +156,8 @@
           ></p-multiSelect>
         </div>
       </div>
-      <label>Notes</label>
-      <textarea pInputTextarea formControlName="note"></textarea>
-
+      <label for="note">Note</label>
+      <textarea id="note" pInputText formControlName="note"></textarea>
       <label>Documents</label>
       <p-fileUpload
         formControlName="documents"
@@ -160,18 +174,19 @@
           </ul>
         </ng-template>
       </p-fileUpload>
-    </div>
-
-    <p-toolbar>
-      <div class="p-toolbar-group-end">
-        <button class="button-Cancel">Cancel</button>
+      <div class="flex-container">
         <p-button
           label="Save"
           icon="pi pi-check"
           (onClick)="saveActivity()"
         ></p-button>
+        <p-button
+          label="Cancel"
+          icon="pi pi-times"
+          (onClick)="hideAddDialog()"
+        ></p-button>
       </div>
-    </p-toolbar>
+    </form>
   </div>
 </p-dialog>
 <!-- edit activity dialog  -->
@@ -190,19 +205,43 @@
     <form [formGroup]="editForm">
       <div class="container">
         <div class="left-section">
-          <label for="date">Date</label>
+          <label for="date">Date <span>*</span></label>
           <p-calendar
             inputId="calendar-24h"
             formControlName="date"
             [showTime]="true"
           ></p-calendar>
-          <label>Activity Type</label>
+          <div
+            *ngIf="
+              activityForm.controls['date'].errors?.required &&
+              activityForm.controls['date'].touched
+            "
+          >
+            <small class="text-danger">Date is required.</small>
+          </div>
+          <label for="subject">Subject</label>
+          <input
+            pInputText
+            id="subject"
+            type="text"
+            formControlName="subject"
+          />
+        </div>
+        <div class="right-section">
+          <label>Activity Type <span>*</span></label>
           <p-dropdown
             formControlName="activityType"
             [options]="activityTypes"
             placeholder="Select activity type "
           ></p-dropdown>
-
+          <div
+            *ngIf="
+              activityForm.controls['activityType'].errors?.required &&
+              activityForm.controls['activityType'].touched
+            "
+          >
+            <small class="text-danger">Activity Type is required.</small>
+          </div>
           <label for="participants">Participants</label>
           <p-multiSelect
             id="participants"
@@ -211,43 +250,32 @@
             optionLabel="firstName"
           ></p-multiSelect>
         </div>
-        <div class="right-section">
-          <label for="subject">Subject</label>
-          <input
-            pInputText
-            id="subject"
-            type="text"
-            formControlName="subject"
-          />
-          <label for="note">Note</label>
-          <textarea id="note" pInputText formControlName="note"></textarea>
+      </div>
+      <label for="note">Note</label>
+      <textarea id="note" pInputText formControlName="note"></textarea>
 
-          <label>Documents</label>
-          <div>{{ uploadedFiles }}</div>
-          <p-fileUpload
-            formControlName="documents"
-            chooseLabel="Choose"
-            chooseIcon="pi pi-upload"
-            [multiple]="true"
-            (onSelect)="onFileSelect($event)"
-          >
-          </p-fileUpload>
-        </div>
+      <label>Documents</label>
 
-        <p-toolbar>
-          <div class="p-toolbar-group-end">
-            <p-button
-              label="Cancel"
-              icon="pi pi-check"
-              (onClick)="hideDialog()"
-            ></p-button>
-            <p-button
-              label="Save"
-              icon="pi pi-check"
-              (onClick)="saveEditActivity()"
-            ></p-button>
-          </div>
-        </p-toolbar>
+      <p-fileUpload
+        formControlName="documents"
+        chooseLabel="Choose"
+        chooseIcon="pi pi-upload"
+        [multiple]="true"
+        (onSelect)="onFileSelect($event)"
+      >
+      </p-fileUpload>
+      <div>{{ uploadedFiles }}</div>
+      <div class="flex-container">
+        <p-button
+          label="Save"
+          icon="pi pi-check"
+          (onClick)="saveEditActivity()"
+        ></p-button>
+        <p-button
+          label="Cancel"
+          icon="pi pi-times"
+          (onClick)="hideDialog()"
+        ></p-button>
       </div>
     </form>
   </div>

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Table } from 'primeng/table';
 import { Activity, ActivityType } from 'src/app/models/activity';
@@ -15,6 +15,7 @@ interface UploadEvent {
   styleUrls: ['./activities.component.css'],
 })
 export class ActivitiesComponent implements OnInit {
+  @ViewChild('dt') dt!: Table;
   @Input() contactId?: number;
   searchValue: string | undefined;
   visible: boolean = false;
@@ -35,7 +36,7 @@ export class ActivitiesComponent implements OnInit {
 
   ngOnInit() {
     if (this.contactId) {
-      this.fetchContactActivities(); 
+      this.fetchContactActivities();
     } else {
       this.fetchActivities();
     }
@@ -108,15 +109,16 @@ export class ActivitiesComponent implements OnInit {
       this.activityService.addActivity(formData).subscribe({
         next: (response) => {
           console.log('activity saved successfully:', response);
-          this.fetchActivities();
-        },
+          if (this.contactId) {
+            this.fetchContactActivities();
+          } else {
+            this.fetchActivities();
+          }        },
         error: (error) => {
           console.log('Error saving activity:', error);
         },
       });
-      this.visible = false;
-      this.activityForm.reset();
-      this.uploadedFiles = [];
+      this.hideAddDialog();
     }
   }
   saveEditActivity() {
@@ -125,8 +127,11 @@ export class ActivitiesComponent implements OnInit {
       this.activityService.updateActivity(this.editForm.value).subscribe({
         next: (response) => {
           console.log('activity updated successfully:', response);
-          this.fetchActivities();
-        },
+ if (this.contactId) {
+      this.fetchContactActivities();
+    } else {
+      this.fetchActivities();
+    }        },
         error: (error) => {
           console.log('Error updating activity:', error);
         },
@@ -153,10 +158,6 @@ export class ActivitiesComponent implements OnInit {
     this.activityDialog = true;
   }
 
-  hideDialog() {
-    this.activityDialog = false;
-    this.editForm.reset();
-  }
   deleteActivity(idActivity: number) {
     this.activityService.deleteActivityById(idActivity).subscribe({
       next: (response) => {
@@ -175,10 +176,25 @@ export class ActivitiesComponent implements OnInit {
   showDialog() {
     this.visible = true;
   }
+  hideAddDialog() {
+    this.visible = false;
+    this.activityForm.reset();
+    this.uploadedFiles = [];
+  }
+  hideDialog() {
+    this.activityDialog = false;
+    this.editForm.reset();
+  }
   onFileSelect(event: UploadEvent) {
     this.uploadedFiles = [];
     for (let file of event.files) {
       this.uploadedFiles.push(file);
     }
   }
+  onSearch(event: Event) {
+    const inputValue = (event.target as HTMLInputElement).value;
+    console.log('Searching for:', inputValue); // Debugging
+    this.dt.filterGlobal(inputValue, 'contains');
+  }
+  
 }

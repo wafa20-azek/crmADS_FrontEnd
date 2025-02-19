@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Table } from 'primeng/table';
 import { Activity } from 'src/app/models/activity';
@@ -12,6 +12,7 @@ import { ContactsService } from 'src/app/services/contacts/contacts.service';
   styleUrls: ['./contacts.component.css'],
 })
 export class ContactsComponent implements OnInit {
+  @ViewChild('dt') dt!: Table;
   searchValue: string | undefined;
   visible: boolean = false;
   addForm!: FormGroup;
@@ -20,6 +21,8 @@ export class ContactsComponent implements OnInit {
   submitted: boolean = false;
   contact!: Contact;
   contacts!: Contact[];
+  filteredContacts!: Contact[];
+
   jobTitles = Object.values(JobTitle);
   activities!: Activity[];
   contactId!: number;
@@ -91,10 +94,14 @@ export class ContactsComponent implements OnInit {
     });
   }
   editContact(contactedit: Contact) {
+    this.filteredContacts = this.contacts.filter(
+      (contact) => contact !== contactedit
+    );
+
     this.editForm.patchValue({
       ...contactedit,
       jobTitle: contactedit.jobTitle,
-      contactOwner: contactedit.contactOwner ? contactedit.contactOwner : null,
+      contactOwner: contactedit.contactOwner,
       address: {
         address: contactedit.address.address,
         city: contactedit.address.city,
@@ -168,5 +175,10 @@ export class ContactsComponent implements OnInit {
   hideDialogAdd() {
     this.visible = false;
     this.addForm.reset();
+  }
+  onSearch(event: Event) {
+    const inputValue = (event.target as HTMLInputElement).value;
+    console.log('Searching for:', inputValue); // Debugging
+    this.dt.filterGlobal(inputValue, 'contains');
   }
 }

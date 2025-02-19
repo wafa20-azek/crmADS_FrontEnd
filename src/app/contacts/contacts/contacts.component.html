@@ -37,8 +37,8 @@
         <input
           pInputText
           type="text"
-          (input)="dt.filterGlobal($event.target, 'contains')"
-          placeholder="Keyboard Search"
+          (input)="onSearch($event)"
+          placeholder="Keyword Search"
         />
       </div>
     </ng-template>
@@ -224,24 +224,18 @@
           </div>
         </fieldset>
       </div>
-      <p-toolbar>
-        <div class="p-toolbar-group-start">
-          <button class="button-Cancel">Send email</button>
-        </div>
-
-        <div class="p-toolbar-group-end">
-          <p-button
-            label="Cancel"
-            icon="pi pi-times"
-            (onClick)="hideDialogAdd()"
-          ></p-button>
-          <p-button
-            label="Save"
-            icon="pi pi-check"
-            (onClick)="addContact()"
-          ></p-button>
-        </div>
-      </p-toolbar>
+    </div>
+    <div class="flex-container">
+      <p-button
+        label="Save"
+        icon="pi pi-check"
+        (onClick)="addContact()"
+      ></p-button>
+      <p-button
+        label="Cancel"
+        icon="pi pi-times"
+        (onClick)="hideDialogAdd()"
+      ></p-button>
     </div>
   </div>
 </p-dialog>
@@ -317,7 +311,7 @@
                     <p-dropdown
                       id="contactOwner"
                       formControlName="contactOwner"
-                      [options]="contacts"
+                      [options]="filteredContacts"
                       optionLabel="firstName"
                       placeholder="Select Contact Owner"
                     >
@@ -422,18 +416,18 @@
               </div>
             </fieldset>
           </form>
-          <p-toolbar>
-            <p-button
-              label="Cancel"
-              icon="pi pi-times"
-              (onClick)="hideDialog()"
-            ></p-button>
+          <div class="flex-container">
             <p-button
               label="Save"
               icon="pi pi-check"
               (onClick)="saveContact()"
             ></p-button>
-          </p-toolbar>
+            <p-button
+              label="Cancel"
+              icon="pi pi-times"
+              (onClick)="hideDialog()"
+            ></p-button>
+          </div>
         </div>
       </p-tabPanel>
       <p-tabPanel header="activities">

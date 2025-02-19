@@ -23,16 +23,10 @@ fieldset legend {
   flex-direction: column;
   padding: 1rem;
 }
-#address,input {
-  width: 99%;
-  padding: 10px;
-  margin: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-p-dropdown {
-  margin: 10px;
-  max-width: 100%;
+.field,
+label {
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 span {
   color: rgb(238, 125, 19);
@@ -52,4 +46,13 @@ small {
   width: 7rem;
   height: 3rem;
 }
-
+.flex-container {
+  display: flex;
+  flex-direction: row-reverse;
+  margin: 3%;
+}
+@media (max-width: 800px) {
+  .flex-container {
+    flex-direction: column;
+  }
+}
