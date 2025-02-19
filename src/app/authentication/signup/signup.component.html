@@ -1,57 +1,93 @@
 <div class="container">
   <div class="screen-card">
     <div class="left-section">
-      <img
-        src="https://img.freepik.com/free-vector/gradient-crm-illustration_23-2149370936.jpg?semt=ais_hybrid"
-        alt="Image"
-      />
+      <div class="card image-card">
+        <img
+          src="https://img.freepik.com/free-vector/gradient-crm-illustration_23-2149370936.jpg?semt=ais_hybrid"
+          alt="Image"
+          class="responsive-image"
+        />
+      </div>
     </div>
+    
     <div class="right-section">
-      <div class="card">
+      <div class="form-wrapper">
         <form [formGroup]="formGroup">
-          <label>Username</label>
-          <input
-            type="text"
-            pInputText
-            id="pInputText"
-            formControlName="username"
-          />
-          <label>Email</label>
-          <input
-            type="email"
-            pInputText
-            id="pInputEmail"
-            formControlName="email"
-          />
-          <div
-            *ngIf="
-              formGroup.controls['email'].errors?.required &&
-              formGroup.controls['email'].touched
-            "
-          >
-            <small class="text-danger">Email is required.</small>
+          <div class="card form-card">
+            <div class="form-field">
+              <label>Username</label>
+              <input
+                type="text"
+                pInputText
+                id="pInputText"
+                formControlName="username"
+                class="p-fluid"
+              />
+            </div>
+
+            <div class="form-field">
+              <label>Email</label>
+              <input
+                type="email"
+                pInputText
+                id="pInputEmail"
+                formControlName="email"
+                class="p-fluid"
+              />
+              <div
+                *ngIf="
+                  formGroup.controls['email'].errors?.required &&
+                  formGroup.controls['email'].touched
+                "
+                class="error-message"
+              >
+                <small class="text-danger">Email is required.</small>
+              </div>
+              <div
+                *ngIf="
+                  formGroup.controls['email'].errors?.email &&
+                  formGroup.controls['email'].touched
+                "
+                class="error-message"
+              >
+                <small class="text-danger">Email format ***@***.</small>
+              </div>
+            </div>
+
+            <div class="form-field">
+              <label>Password</label>
+              <p-password
+                formControlName="password"
+                [toggleMask]="true"
+                [feedback]="false"
+                styleClass="p-fluid"
+              ></p-password>
+              <div
+                *ngIf="
+                  formGroup.controls['password'].errors?.required &&
+                  formGroup.controls['password'].touched
+                "
+                class="error-message"
+              >
+                <small class="text-danger">Password is required.</small>
+              </div>
+            </div>
+
+            <div class="button-container">
+              <p-button
+                label="Sign up"
+                icon="pi pi-check"
+                iconPos="right"
+                styleClass="w-full"
+              ></p-button>
+            </div>
+
+            <div class="sign-in-link">
+              <p>
+                Already have an account? <a href="/auth/signin">Sign in here!</a>
+              </p>
+            </div>
           </div>
-          <label>Password</label>
-          <p-password
-            formControlName="password"
-            [feedback]="false"
-          ></p-password>
-          <div
-            *ngIf="
-              formGroup.controls['password'].errors?.required &&
-              formGroup.controls['password'].touched
-            "
-          >
-            <small class="text-danger">Password is required.</small>
-          </div>
-          <p-button
-            label="Sign up"
-            icon="pi pi-check"
-            iconPos="right"
-          ></p-button>
-          <p>
-            Already have an account? <a href="/auth/signin">Sign in here!</a>
-          </p>
         </form>
       </div>
     </div>

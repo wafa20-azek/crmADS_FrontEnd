@@ -57,6 +57,7 @@ small {
   flex-direction: row-reverse;
   margin: 3%;
 }
+
 @media (max-width: 800px) {
   .flex-container {
     flex-direction: column;
