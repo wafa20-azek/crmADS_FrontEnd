@@ -35,12 +35,10 @@ export class HeaderComponent implements OnInit {
           this.authService.logOut().subscribe({
             next: (response) => {
               console.log('Logout successful:', response);
-              // Navigate to the auth page after successful logout
               this.router.navigate(['/auth']);
             },
             error: (err) => {
               console.error('Logout failed:', err);
-              // Optionally show an alert or error message to the user
               alert('Logout failed. Please try again!');
             }
           });
