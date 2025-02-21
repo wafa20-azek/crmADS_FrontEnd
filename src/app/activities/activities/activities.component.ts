@@ -44,7 +44,7 @@ export class ActivitiesComponent implements OnInit {
 
     this.activityForm = this.fb.group({
       date: ['', Validators.required],
-      activityType: [''],
+      activityType: ['', Validators.required],
       participants: [[]],
       subject: [''],
       note: [''],
@@ -54,7 +54,7 @@ export class ActivitiesComponent implements OnInit {
       id: [],
       date: ['', Validators.required],
       activityType: ['', Validators.required],
-      participants: [[], Validators.required],
+      participants: [[]],
       subject: [''],
       note: [''],
       documents: [[]],

@@ -42,7 +42,7 @@ export class ContactsComponent implements OnInit {
       email: ['', Validators.email],
       phone: [''],
       company: [''],
-      contactOwner: ['', Validators.required],
+      contactOwner: [null ],
       jobTitle: [null],
       address: this.fb.group({
         address: [''],
@@ -56,11 +56,11 @@ export class ContactsComponent implements OnInit {
       id: [],
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
+      email: ['', [ Validators.email]],
       phone: [''],
       company: [''],
-      jobTitle: [''],
-      contactOwner: ['', Validators.required],
+      jobTitle: [null],
+      contactOwner: [null ],
       address: this.fb.group({
         address: [''],
         country: [''],
