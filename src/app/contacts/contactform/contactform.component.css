@@ -1,0 +1,43 @@
+
+  fieldset {
+    border: 2px solid rgb(238, 125, 19);
+    border-radius: 12px;
+    padding: 5px;
+  }
+  fieldset legend {
+    color: rgb(238, 125, 19);
+  }
+  .container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .left-section,
+  .right-section {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+  }
+  .field,
+  label {
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+  span {
+    color: rgb(238, 125, 19);
+  }
+  small {
+    color: red;
+  }
+ 
+  .flex-container {
+    display: flex;
+    flex-direction: row-reverse;
+    margin: 3%;
+  }
+  
+  @media (max-width: 800px) {
+    .flex-container {
+      flex-direction: column;
+    }
+  }
+  

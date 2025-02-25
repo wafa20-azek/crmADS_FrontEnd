@@ -15,8 +15,9 @@ import { DividerModule } from 'primeng/divider';
 import { SplitterModule } from 'primeng/splitter';
 import { TabViewModule } from 'primeng/tabview';
 import { ActivitiesModule } from '../activities/activities.module';
+import { ContactformComponent } from './contactform/contactform.component';
 @NgModule({
-  declarations: [ContactsComponent],
+  declarations: [ContactsComponent, ContactformComponent],
   imports: [
     CommonModule,
     ContactsRoutingModule,

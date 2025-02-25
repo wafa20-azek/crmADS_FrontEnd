@@ -1,7 +1,8 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Table } from 'primeng/table';
-import { Activity, ActivityType } from 'src/app/models/activity';
+import { Activity } from 'src/app/models/activity';
+import { ActivityType } from 'src/app/models/activityType';
 import { Contact } from 'src/app/models/contact';
 import { ActivitiesService } from 'src/app/services/activities/activities.service';
 import { ContactsService } from 'src/app/services/contacts/contacts.service';
@@ -19,15 +20,14 @@ export class ActivitiesComponent implements OnInit {
   @Input() contactId?: number;
   searchValue: string | undefined;
   visible: boolean = false;
-  activityForm!: FormGroup;
-  editForm!: FormGroup;
   activityDialog: boolean = false;
   activityTypes = Object.values(ActivityType);
   docs!: File[];
   contacts!: Contact[];
   activities!: Activity[];
   uploadedFiles: File[] = [];
-
+  reloadform = false;
+  activityEditForm!: Activity;
   constructor(
     private fb: FormBuilder,
     private activityService: ActivitiesService,
@@ -41,24 +41,6 @@ export class ActivitiesComponent implements OnInit {
       this.fetchActivities();
     }
     this.fetchContacts();
-
-    this.activityForm = this.fb.group({
-      date: ['', Validators.required],
-      activityType: ['', Validators.required],
-      participants: [[]],
-      subject: [''],
-      note: [''],
-      documents: [[]],
-    });
-    this.editForm = this.fb.group({
-      id: [],
-      date: ['', Validators.required],
-      activityType: ['', Validators.required],
-      participants: [[]],
-      subject: [''],
-      note: [''],
-      documents: [[]],
-    });
   }
   fetchContacts() {
     this.contactService.getContacts().subscribe({
@@ -93,68 +75,52 @@ export class ActivitiesComponent implements OnInit {
       },
     });
   }
-  saveActivity() {
-    if (this.activityForm.valid) {
-      console.log(this.activityForm.value);
-      const formData = new FormData();
+  saveActivity(formData: FormData) {
+    console.log(formData);
+    
 
-      const activityData = this.activityForm.value;
-      formData.append('activity', JSON.stringify(activityData));
-      if (this.uploadedFiles.length > 0) {
-        for (let file of this.uploadedFiles) {
-          formData.append('file', file);
+    this.activityService.saveActivity(formData).subscribe({
+      next: (response) => {
+        console.log('activity saved successfully:', response);
+        
+        if (this.contactId) {
+          this.fetchContactActivities();
+        } else {
+          this.fetchActivities();
         }
-      }
-
-      this.activityService.addActivity(formData).subscribe({
-        next: (response) => {
-          console.log('activity saved successfully:', response);
-          if (this.contactId) {
-            this.fetchContactActivities();
-          } else {
-            this.fetchActivities();
-          }        },
-        error: (error) => {
-          console.log('Error saving activity:', error);
-        },
-      });
-      this.hideAddDialog();
-    }
-  }
-  saveEditActivity() {
-    if (this.editForm.valid) {
-      console.log(this.editForm.value);
-      this.activityService.updateActivity(this.editForm.value).subscribe({
-        next: (response) => {
-          console.log('activity updated successfully:', response);
- if (this.contactId) {
-      this.fetchContactActivities();
-    } else {
-      this.fetchActivities();
-    }        },
-        error: (error) => {
-          console.log('Error updating activity:', error);
-        },
-      });
-      this.hideDialog();
-    }
-  }
-  editActivity(activity: Activity) {
-    this.editForm.patchValue({
-      ...activity,
-      date: activity.date ? new Date(activity.date) : null,
-      subject: activity?.subject,
-      activityType: activity.activityType,
-      participants: activity?.participants,
-      note: activity.note,
+        alert('activity saved successfully!');
+      },
+      error: (error) => {
+        console.log('Error saving activity:', error);
+        alert('Error saving activity!');
+      },
     });
-    this.uploadedFiles = [];
-    if (activity.documents && Array.isArray(activity.documents)) {
-      for (let file of activity.documents) {
-        this.uploadedFiles.push(file);
-      }
-    }
-    console.log(this.uploadedFiles);
+    this.hideAddDialog();
+  }
+  saveEditActivity(editForm: FormData) {
+    this.activityService.saveActivity(editForm).subscribe({
+      next: (response) => {
+        console.log('activity updated successfully:', response);
+       
+        if (this.contactId) {
+          this.fetchContactActivities();
+        } else {
+          this.fetchActivities();
+        }
+        alert('activity updated successfully!');
+      },
+      error: (error) => {
+        console.log('Error updating activity:', error);
+        alert('Error updating activity!');
+      },
+    });
+    this.hideDialog();
+  }
+  editActivity(activityedit: Activity) {
+    this.activityEditForm = activityedit;
+    this.reloadform = false;
+    setTimeout(() => (this.reloadform = true), 0);
+
     this.activityDialog = true;
   }
 
@@ -162,10 +128,12 @@ export class ActivitiesComponent implements OnInit {
     this.activityService.deleteActivityById(idActivity).subscribe({
       next: (response) => {
         console.log('Activity deleted successfully', response);
+        alert('Activity deleted successfully!');
         this.fetchActivities();
       },
       error: (error) => {
         console.log('Error deleting activity', error);
+        alert('Error deleting activity!');
       },
     });
   }
@@ -178,12 +146,10 @@ export class ActivitiesComponent implements OnInit {
   }
   hideAddDialog() {
     this.visible = false;
-    this.activityForm.reset();
     this.uploadedFiles = [];
   }
   hideDialog() {
     this.activityDialog = false;
-    this.editForm.reset();
   }
   onFileSelect(event: UploadEvent) {
     this.uploadedFiles = [];
@@ -196,5 +162,4 @@ export class ActivitiesComponent implements OnInit {
     console.log('Searching for:', inputValue); // Debugging
     this.dt.filterGlobal(inputValue, 'contains');
   }
-  
 }

@@ -18,13 +18,11 @@ export class ActivitiesService {
   getActivityByContactId(id: number): Observable<Activity[]> {
     return this.http.get<Activity[]>(`${this.apiUrl}/getByContact/${id}`,{ withCredentials: true });
   }
-  addActivity(formData:FormData): Observable<Activity> {
+  saveActivity(formData:FormData): Observable<Activity> {
     return this.http.post<Activity>(`${this.apiUrl}/addActivity`, formData,{ withCredentials: true });
   }
   deleteActivityById(id: number): Observable<any> {
     return this.http.delete<Activity>(`${this.apiUrl}/deleteActivity/${id}`,{ withCredentials: true });
   }
-  updateActivity(activity: Activity): Observable<Activity> {
-    return this.http.put<Activity>(`${this.apiUrl}/updateActivity`, activity,{ withCredentials: true });
-  }
+  
 }

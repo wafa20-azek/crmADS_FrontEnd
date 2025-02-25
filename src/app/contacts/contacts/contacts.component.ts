@@ -2,7 +2,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Table } from 'primeng/table';
 import { Activity } from 'src/app/models/activity';
-import { Contact, JobTitle } from 'src/app/models/contact';
+import { Contact } from 'src/app/models/contact';
+import { JobTitle } from 'src/app/models/jobTitle';
 import { ActivitiesService } from 'src/app/services/activities/activities.service';
 import { ContactsService } from 'src/app/services/contacts/contacts.service';
 
@@ -15,60 +16,22 @@ export class ContactsComponent implements OnInit {
   @ViewChild('dt') dt!: Table;
   searchValue: string | undefined;
   visible: boolean = false;
-  addForm!: FormGroup;
-  editForm!: FormGroup;
   contactDialog: boolean = false;
-  submitted: boolean = false;
-  contact!: Contact;
   contacts!: Contact[];
-  filteredContacts!: Contact[];
-
   jobTitles = Object.values(JobTitle);
   activities!: Activity[];
   contactId!: number;
   reloadActivities = false;
+  reloadform = false;
 
+  contactEditForm!: Contact;
   constructor(
-    private fb: FormBuilder,
     private contactService: ContactsService,
     private activityService: ActivitiesService
   ) {}
 
   ngOnInit() {
     this.fetchContacts();
-    this.addForm = this.fb.group({
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
-      email: ['', Validators.email],
-      phone: [''],
-      company: [''],
-      contactOwner: [null ],
-      jobTitle: [null],
-      address: this.fb.group({
-        address: [''],
-        country: [''],
-        city: [''],
-        zipCode: [''],
-        state: [''],
-      }),
-    });
-    this.editForm = this.fb.group({
-      id: [],
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
-      email: ['', [ Validators.email]],
-      phone: [''],
-      company: [''],
-      jobTitle: [null],
-      contactOwner: [null ],
-      address: this.fb.group({
-        address: [''],
-        country: [''],
-        city: [''],
-        zipCode: [''],
-        state: [''],
-      }),
-    });
   }
 
   fetchContacts() {
@@ -94,60 +57,45 @@ export class ContactsComponent implements OnInit {
     });
   }
   editContact(contactedit: Contact) {
-    this.filteredContacts = this.contacts.filter(
-      (contact) => contact !== contactedit
-    );
-
-    this.editForm.patchValue({
-      ...contactedit,
-      jobTitle: contactedit.jobTitle,
-      contactOwner: contactedit.contactOwner,
-      address: {
-        address: contactedit.address.address,
-        city: contactedit.address.city,
-        country: contactedit.address.country,
-        state: contactedit.address.state,
-        zipCode: contactedit.address.zipCode,
-      },
-    });
-    this.contactId = contactedit.id;
+    this.contactEditForm = contactedit;
+    this.contactId=contactedit.id;
+    this.reloadform = false;
+    setTimeout(() => (this.reloadform = true), 0);
     this.contactDialog = true;
     this.reloadActivities = false;
     setTimeout(() => (this.reloadActivities = true), 0);
   }
-  addContact() {
-    if (this.addForm.valid) {
-      console.log(this.addForm.value);
-      this.contactService.addContact(this.addForm.value).subscribe({
-        next: (response) => {
-          console.log('contact added successfully:', response);
-          this.fetchContacts();
-        },
-        error: (error) => {
-          console.error('Error adding contact:', error);
-        },
-      });
+  addContact(addForm: FormGroup) {
+    console.log(addForm.value);
 
-      this.hideDialogAdd();
-      this.fetchContacts();
-    }
+    this.contactService.addContact(addForm.value).subscribe({
+      next: (response) => {
+        console.log('contact added successfully:', response);
+        this.fetchContacts();
+        alert('contact added successfully!');
+      },
+      error: (error) => {
+        console.error('Error adding contact:', error);
+        alert('Error adding contact!');
+      },
+    });
+
+    this.hideDialogAdd();
   }
-  saveContact() {
-    if (this.editForm.valid) {
-      console.log(this.editForm.value);
-      this.contactService.updateContact(this.editForm.value).subscribe({
-        next: (response) => {
-          console.log('contact updated successfully:', response);
-          this.fetchContacts();
-        },
-        error: (error) => {
-          console.error('Error updating contact:', error);
-        },
-      });
-      this.submitted = true;
-
-      this.contactDialog = false;
-    }
+  saveEditContact(editForm: FormGroup) {
+    console.log(editForm.value);
+    this.contactService.updateContact(editForm.value).subscribe({
+      next: (response) => {
+        console.log('contact updated successfully:', response);
+        this.fetchContacts();
+        alert('contact updated successfully!');
+      },
+      error: (error) => {
+        console.error('Error updating contact:', error);
+        alert('Error updating contact!');
+      },
+    });
+    this.contactDialog = false;
   }
 
   deleteContact(idcontact: number) {
@@ -155,9 +103,11 @@ export class ContactsComponent implements OnInit {
       next: (response) => {
         console.log('contact deleted successfully:', response);
         this.fetchContacts();
+        alert('contact deleted successfully!');
       },
       error: (error) => {
         console.error('Error deleting contact:', error);
+        alert('Error deleting contact!');
       },
     });
   }
@@ -170,11 +120,9 @@ export class ContactsComponent implements OnInit {
   }
   hideDialog() {
     this.contactDialog = false;
-    this.editForm.reset();
   }
   hideDialogAdd() {
     this.visible = false;
-    this.addForm.reset();
   }
   onSearch(event: Event) {
     const inputValue = (event.target as HTMLInputElement).value;

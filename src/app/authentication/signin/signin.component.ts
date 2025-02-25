@@ -24,6 +24,8 @@ export class SigninComponent implements OnInit {
   login() {
     this.authService.login(this.formGroup.value).subscribe({
       next: (response) => {
+        this.authService.getCurrentUser();
+
         this.router.navigate(['/']);
       },
       error: (error) => {

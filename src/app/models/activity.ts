@@ -1,18 +1,29 @@
-import { Contact } from "./contact";
+import { ActivityType } from './activityType';
+import { Contact } from './contact';
 
-export enum ActivityType{
-    APPEL = 'APPEL',
-    DINER = 'DINER',
-    REUNION = 'REUNION',
-    EMAIL = 'EMAIL',
-    NOTE = 'NOTE'
-}
-export interface Activity{
-    date:Date;
-    activityType:ActivityType;
-    participants: Contact[];
-    subject: string;
-    note: string;
-    documents:File[]
 
+export class Activity {
+  date: Date;
+  activityType: ActivityType;
+  participants: Contact[];
+  subject: string;
+  note: string;
+  documents: File[];
+
+  constructor(
+    date: Date,
+    activityType: ActivityType,
+    participants: Contact[],
+    subject: string,
+    note: string,
+    documents: File[]
+  ) {
+    this.date = date;
+
+    this.activityType = activityType;
+    this.participants = participants;
+    this.subject = subject;
+    this.note = note;
+    this.documents = documents;
+  }
 }

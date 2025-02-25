@@ -5,52 +5,12 @@
 p-button {
   margin: 2px;
 }
-fieldset {
-  border: 2px solid rgb(238, 125, 19);
-  border-radius: 12px;
-  padding: 5px;
-}
-fieldset legend {
-  color: rgb(238, 125, 19);
-}
+
 .container {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
 }
-.left-section,
-.right-section {
-  display: flex;
-  flex-direction: column;
-  padding: 1rem;
-}
-.field,
-label {
-  padding-top: 10px;
-  padding-bottom: 10px;
-}
-span {
-  color: rgb(238, 125, 19);
-}
-small {
-  color: red;
-}
-.button-Cancel,
-.button-Save,
-.button-add {
-  border-radius: 24px;
-  border: none;
-  background-color: rgb(238, 125, 19);
-  color: white;
-  padding: 5px;
-  margin: 5px;
-  width: 7rem;
-  height: 3rem;
-}
-.flex-container {
-  display: flex;
-  flex-direction: row-reverse;
-  margin: 3%;
-}
+
 @media (max-width: 800px) {
   .flex-container {
     flex-direction: column;

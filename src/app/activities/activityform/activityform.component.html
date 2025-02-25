@@ -1,0 +1,75 @@
+<div class="card flex justify-content-center">
+    <form [formGroup]="activityForm">
+      <div class="container">
+        <div class="left-section">
+          
+          <label>Date <span>*</span></label>
+          <p-calendar
+            inputId="calendar-24h"
+            formControlName="date"
+            [showTime]="true"
+          ></p-calendar>
+          <div
+            *ngIf="
+              activityForm.controls['date'].errors?.required &&
+              activityForm.controls['date'].touched
+            "
+          >
+            <small class="text-danger">Date is required.</small>
+          </div>
+          <label>Subject </label>
+          <input type="text" pInputText formControlName="subject" />
+        </div>
+
+        <div class="right-section">
+          <label>Activity Type <span>*</span></label>
+          <p-dropdown
+            formControlName="activityType"
+            [options]="activityTypes"
+            placeholder="Select activity type "
+          ></p-dropdown>
+          <div
+            *ngIf="
+              activityForm.controls['activityType'].errors?.required &&
+              activityForm.controls['activityType'].touched
+            "
+          >
+            <small class="text-danger">Activity Type is required.</small>
+          </div>
+
+          <label>Participants </label>
+          <p-multiSelect
+            [options]="contacts"
+            formControlName="participants"
+            optionLabel="firstName"
+            placeholder="Select Participants"
+          ></p-multiSelect>
+        </div>
+      </div>
+      <label for="note">Note</label>
+      <textarea id="note" pInputText formControlName="note"></textarea>
+      <label>Documents</label>
+      <p-fileUpload
+        formControlName="documents"
+        chooseLabel="Choose"
+        chooseIcon="pi pi-upload"
+        [multiple]="true"
+        (onSelect)="onFileSelect($event)"
+      >
+        <ng-template pTemplate="content">
+          <ul *ngIf="uploadedFiles.length">
+            <li *ngFor="let file of uploadedFiles">
+              {{ file.name }} - {{ file.size }} bytes
+            </li>
+          </ul>
+        </ng-template>
+      </p-fileUpload>
+      <div>{{ uploadedFiles }}</div>
+        <p-button
+          label="Save"
+          icon="pi pi-check"
+          (onClick)="saveActivity()"
+        ></p-button>
+      
+    </form>
+  </div>

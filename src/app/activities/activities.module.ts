@@ -15,9 +15,10 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { FileUploadModule } from 'primeng/fileupload';
 import { HttpClientModule } from '@angular/common/http';
 import { CalendarModule } from 'primeng/calendar';
+import { ActivityformComponent } from './activityform/activityform.component';
 
 @NgModule({
-  declarations: [ActivitiesComponent],
+  declarations: [ActivitiesComponent, ActivityformComponent],
   imports: [
     CommonModule,
     ActivitiesRoutingModule,

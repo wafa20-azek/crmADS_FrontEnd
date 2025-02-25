@@ -1,0 +1,106 @@
+<div class="col flex align-items-center justify-content-center">
+  <div [formGroup]="contactForm">
+    <fieldset>
+      <legend>Main Information</legend>
+      <div class="container">
+        <div class="left-section">
+          <div class="field">
+            <label>FirstName <span>*</span> </label>
+            <input type="text" pInputText formControlName="firstName" />
+            <div
+              *ngIf="
+                contactForm.controls['firstName'].errors?.required &&
+                contactForm.controls['firstName'].touched
+              "
+            >
+              <small class="text-danger">FirstName is required.</small>
+            </div>
+            <label>Email</label>
+            <input type="email" pInputText formControlName="email" />
+            <div
+              *ngIf="
+                contactForm.controls['email'].errors?.email &&
+                contactForm.controls['email'].touched
+              "
+            >
+              <small class="text-danger">email must be ***@*** .</small>
+            </div>
+          </div>
+          <div class="field">
+            <label for="contactOwner">Contact Owner</label>
+            <input ID="contactOwner" type="text" pInputText formControlName="contactOwner" [disabled]="true" />
+          </div>
+          <div class="field">
+            <label for="jobTitle">Job Title</label>
+            <p-dropdown
+              id="jobTitle"
+              formControlName="jobTitle"
+              [options]="jobTitles"
+              placeholder="Select Job Title"
+            >
+            </p-dropdown>
+          </div>
+        </div>
+        <div class="right-section">
+          <div class="field">
+            <label>LastName <span>*</span> </label>
+            <input type="text" pInputText formControlName="lastName" />
+            <div
+              *ngIf="
+                contactForm.controls['lastName'].errors?.required &&
+                contactForm.controls['lastName'].touched
+              "
+            >
+              <small class="text-danger">LastName is required.</small>
+            </div>
+          </div>
+          <div class="field">
+            <label>Phone</label>
+            <input type="number" pInputText formControlName="phone" />
+          </div>
+          <div class="field">
+            <label>Company</label>
+            <input type="text" pInputText formControlName="company" />
+          </div>
+        </div>
+      </div>
+    </fieldset>
+
+    <fieldset formGroupName="address">
+      <legend>Address</legend>
+      <div class="field">
+        <label>Address</label>
+        <input type="text" pInputText formControlName="address" />
+      </div>
+      <div class="container">
+        <div class="left-section">
+          <div class="field">
+            <label>Country</label>
+            <input type="text" pInputText formControlName="country" />
+          </div>
+          <div class="field">
+            <label>City</label>
+            <input type="text" pInputText formControlName="city" />
+          </div>
+        </div>
+        <div class="right-section">
+          <div class="field">
+            <label>State</label>
+            <input type="text" pInputText formControlName="state" />
+          </div>
+          <div class="field">
+            <label>Zipcode</label>
+            <input type="number" pInputText formControlName="zipCode" />
+          </div>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+  <div class="flex-container">
+    <p-button
+      label="Save"
+      icon="pi pi-check"
+      (onClick)="saveContact()"
+    ></p-button>
+  </div>
+</div>
