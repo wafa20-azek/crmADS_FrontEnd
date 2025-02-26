@@ -4,7 +4,9 @@ import { Table } from 'primeng/table';
 import { Activity } from 'src/app/models/activity';
 import { Contact } from 'src/app/models/contact';
 import { JobTitle } from 'src/app/models/jobTitle';
+import { User } from 'src/app/models/user';
 import { ActivitiesService } from 'src/app/services/activities/activities.service';
+import { AuthService } from 'src/app/services/auth/auth.service';
 import { ContactsService } from 'src/app/services/contacts/contacts.service';
 
 @Component({
@@ -23,15 +25,17 @@ export class ContactsComponent implements OnInit {
   contactId!: number;
   reloadActivities = false;
   reloadform = false;
+  currentUser!: User | null;
 
   contactEditForm!: Contact;
   constructor(
     private contactService: ContactsService,
-    private activityService: ActivitiesService
+    private activityService: ActivitiesService,private authService: AuthService
   ) {}
 
   ngOnInit() {
     this.fetchContacts();
+    this.currentUser = this.authService.getCurrentUser();
   }
 
   fetchContacts() {

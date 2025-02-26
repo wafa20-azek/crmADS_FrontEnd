@@ -78,16 +78,16 @@
         <td>{{ contact.jobTitle }}</td>
         <td>{{ contact.email }}</td>
         <td>{{ contact.phone }}</td>
-        <td>{{ contact.contactOwner?.email || "N/A" }}</td>
+        <td>{{ contact.contactOwner?.username || "N/A" }}</td>
         <td>
           <div class="action-menu">
             <p-button
               icon="pi pi-pencil"
-              (onClick)="editContact(contact)"
+              (onClick)="editContact(contact)"   [disabled]="contact.contactOwner?.email != currentUser?.email"
             ></p-button>
             <p-button
               icon="pi pi-trash"
-              (onClick)="deleteContact(contact.id)"
+              (onClick)="deleteContact(contact.id)"  [disabled]="contact.contactOwner?.email != currentUser?.email" 
             ></p-button>
           </div>
         </td>

@@ -17,6 +17,27 @@
             <h3>Welcome to ADS CRM</h3>
             <p>Create your account below!</p>
             <div class="form-field">
+              <label>Username</label>
+              <input
+                type="text"
+                pInputText
+                id="pInputUsername"
+                formControlName="username"
+                class="p-fluid"
+              />
+              <div
+                *ngIf="
+                  formGroup.controls['username'].errors?.required &&
+                  formGroup.controls['username'].touched
+                "
+                class="error-message"
+              >
+                <small class="text-danger">username is required.</small>
+              </div>
+             
+            </div>
+
+            <div class="form-field">
               <label>Email</label>
               <input
                 type="email"
